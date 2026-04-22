@@ -2,7 +2,7 @@ import random
 
 from langchain_core.messages import HumanMessage, RemoveMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field  # noqa: F401 (kept intentionally)
 
 from telegram_agent_aws.application.conversation_service.workflow.state import TelegramAgentState
 from telegram_agent_aws.application.conversation_service.workflow.tools import get_retriever_tool
@@ -13,9 +13,7 @@ from telegram_agent_aws.infrastructure.clients.openai import get_openai_client  
 
 elevenlabs_client = get_elevenlabs_client()
 
-
-class RouterResponse(BaseModel):
-    response_type: str = Field(description="The response type to give to the user. It must be one of: 'text' or 'audio'")
+_ROUTER_SUFFIX = "\nReply with only one word: 'text' or 'audio'."
 
 
 def router_node(state: TelegramAgentState):
@@ -25,19 +23,15 @@ def router_node(state: TelegramAgentState):
         base_url="https://api.groq.com/openai/v1",
     )
 
-    sys_msg = SystemMessage(content=ROUTER_SYSTEM_PROMPT.prompt)
-    llm_structured = llm.with_structured_output(RouterResponse, method="json_mode")
+    sys_msg = SystemMessage(content=ROUTER_SYSTEM_PROMPT.prompt + _ROUTER_SUFFIX)
+    response = llm.invoke([sys_msg, state["messages"][-1]])
 
-    response = llm_structured.invoke([sys_msg, state["messages"][-1]])
+    response_type = "audio" if "audio" in response.content.lower() else "text"
 
-    if response.response_type == "text":
-        if random.random() > 0.5:
-            # This is a way to give more realism to the bot.
-            # From time to time, the Telegram Agent will send voice notes,
-            # even if the "response_type" is "text"!
-            return {"response_type": "audio"}
+    if response_type == "text" and random.random() > 0.5:
+        return {"response_type": "audio"}
 
-    return {"response_type": response.response_type}
+    return {"response_type": response_type}
 
 
 def generate_text_response_node(state: TelegramAgentState):

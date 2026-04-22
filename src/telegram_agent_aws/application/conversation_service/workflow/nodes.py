@@ -18,17 +18,7 @@ _ROUTER_SUFFIX = "\nReply with only one word: 'text' or 'audio'."
 
 
 def router_node(state: TelegramAgentState):
-    llm = ChatGroq(model=settings.GROQ_MODEL, api_key=settings.GROQ_API_KEY)
-
-    sys_msg = SystemMessage(content=ROUTER_SYSTEM_PROMPT.prompt + _ROUTER_SUFFIX)
-    response = llm.invoke([sys_msg, state["messages"][-1]])
-
-    response_type = "audio" if "audio" in response.content.lower() else "text"
-
-    if response_type == "text" and random.random() > 0.5:
-        return {"response_type": "audio"}
-
-    return {"response_type": response_type}
+    return {"response_type": "text"}
 
 
 def generate_text_response_node(state: TelegramAgentState):
@@ -70,15 +60,15 @@ def summarize_conversation_node(state: TelegramAgentState):
 
 def generate_final_response_node(state: TelegramAgentState):
     if state["response_type"] == "audio":
-        audio = elevenlabs_client.text_to_speech.convert(
-            text=state["messages"][-1].content,
-            voice_id=settings.ELEVENLABS_VOICE_ID,
-            model_id=settings.ELEVENLABS_MODEL_ID,
-        )
+        try:
+            audio = elevenlabs_client.text_to_speech.convert(
+                text=state["messages"][-1].content,
+                voice_id=settings.ELEVENLABS_VOICE_ID,
+                model_id=settings.ELEVENLABS_MODEL_ID,
+            )
+            audio_bytes = b"".join(audio)
+            return {"audio_buffer": audio_bytes}
+        except Exception:
+            pass
 
-        audio_bytes = b"".join(audio)
-
-        return {"audio_buffer": audio_bytes}
-
-    else:
-        return state
+    return state

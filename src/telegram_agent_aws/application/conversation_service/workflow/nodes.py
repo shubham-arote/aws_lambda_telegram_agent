@@ -9,9 +9,8 @@ from telegram_agent_aws.application.conversation_service.workflow.tools import g
 from telegram_agent_aws.config import settings
 from telegram_agent_aws.domain.prompts import ROUTER_SYSTEM_PROMPT, SYSTEM_PROMPT
 from telegram_agent_aws.infrastructure.clients.elevenlabs import get_elevenlabs_client
-from telegram_agent_aws.infrastructure.clients.openai import get_openai_client
+from telegram_agent_aws.infrastructure.clients.openai import get_openai_client  # noqa: F401 (kept intentionally)
 
-openai_client = get_openai_client()
 elevenlabs_client = get_elevenlabs_client()
 
 

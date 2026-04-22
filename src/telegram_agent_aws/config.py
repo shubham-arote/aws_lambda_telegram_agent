@@ -5,14 +5,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", env_file_encoding="utf-8")
     GROQ_API_KEY: str
-    OPENAI_API_KEY: str
+    # OPENAI_API_KEY: str
     ELEVENLABS_API_KEY: str
     QDRANT_API_KEY: str
     QDRANT_URL: str
     COMET_API_KEY: str
     TELEGRAM_BOT_TOKEN: str
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
-    OPENAI_MODEL: str = "gpt-4o-mini"
+    # OPENAI_MODEL: str = "gpt-4o-mini"
     EMBEDDING_MODEL: str = "gemini-embedding-2-preview"
     GEMINI_API_KEY: str
     ELEVENLABS_VOICE_ID: str = "T8lgQl6x5PSdhmmWx42m"

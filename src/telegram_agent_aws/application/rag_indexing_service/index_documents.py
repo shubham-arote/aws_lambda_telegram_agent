@@ -3,7 +3,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from loguru import logger
-
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from telegram_agent_aws.config import settings
 from telegram_agent_aws.infrastructure.clients.qdrant import get_qdrant_client
 
@@ -20,7 +20,7 @@ def generate_split_documents():
 
 def index_documents():
     all_splits = generate_split_documents()
-    embeddings = OpenAIEmbeddings(model=settings.EMBEDDING_MODEL, api_key=settings.OPENAI_API_KEY)
+    embeddings = GoogleGenerativeAIEmbeddings(model=settings.EMBEDDING_MODEL, api_key=settings.GEMINI_API_KEY)
 
     QdrantVectorStore.from_documents(
         documents=all_splits,

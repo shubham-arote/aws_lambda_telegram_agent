@@ -26,7 +26,7 @@ def router_node(state: TelegramAgentState):
     )
 
     sys_msg = SystemMessage(content=ROUTER_SYSTEM_PROMPT.prompt)
-    llm_structured = llm.with_structured_output(RouterResponse)
+    llm_structured = llm.with_structured_output(RouterResponse, method="json_mode")
 
     response = llm_structured.invoke([sys_msg, state["messages"][-1]])
 

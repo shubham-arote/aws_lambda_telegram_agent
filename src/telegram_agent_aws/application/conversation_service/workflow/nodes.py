@@ -1,7 +1,8 @@
 import random
 
 from langchain_core.messages import HumanMessage, RemoveMessage, SystemMessage
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI  # noqa: F401 (kept intentionally)
 from pydantic import BaseModel, Field  # noqa: F401 (kept intentionally)
 
 from telegram_agent_aws.application.conversation_service.workflow.state import TelegramAgentState
@@ -17,11 +18,7 @@ _ROUTER_SUFFIX = "\nReply with only one word: 'text' or 'audio'."
 
 
 def router_node(state: TelegramAgentState):
-    llm = ChatOpenAI(
-        model=settings.GROQ_MODEL,
-        api_key=settings.GROQ_API_KEY,
-        base_url="https://api.groq.com/openai/v1",
-    )
+    llm = ChatGroq(model=settings.GROQ_MODEL, api_key=settings.GROQ_API_KEY)
 
     sys_msg = SystemMessage(content=ROUTER_SYSTEM_PROMPT.prompt + _ROUTER_SUFFIX)
     response = llm.invoke([sys_msg, state["messages"][-1]])
@@ -35,11 +32,7 @@ def router_node(state: TelegramAgentState):
 
 
 def generate_text_response_node(state: TelegramAgentState):
-    llm = ChatOpenAI(
-        model=settings.GROQ_MODEL,
-        api_key=settings.GROQ_API_KEY,
-        base_url="https://api.groq.com/openai/v1",
-    )
+    llm = ChatGroq(model=settings.GROQ_MODEL, api_key=settings.GROQ_API_KEY)
     llm_with_tools = llm.bind_tools([get_retriever_tool()])
 
     summary = state.get("summary", "")
@@ -57,11 +50,7 @@ def generate_text_response_node(state: TelegramAgentState):
 
 
 def summarize_conversation_node(state: TelegramAgentState):
-    llm = ChatOpenAI(
-        model=settings.GROQ_MODEL,
-        api_key=settings.GROQ_API_KEY,
-        base_url="https://api.groq.com/openai/v1",
-    )
+    llm = ChatGroq(model=settings.GROQ_MODEL, api_key=settings.GROQ_API_KEY)
 
     summary = state.get("summary", "")
 

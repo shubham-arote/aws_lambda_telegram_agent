@@ -32,6 +32,7 @@ dependencies = [
   "pymongo[srv]>=4.15.3",
   "certifi>=2025.10.5",
   "langchain_google_genai",
+  "langchain-groq",
   "groq"
 
 ]

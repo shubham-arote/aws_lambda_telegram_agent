@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  AWS_REGION: eu-west-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: telegram_bot_agent           # set this to your Amazon ECR repository name
+  AWS_REGION: ap-south-1                   # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: telegram-agent          # set this to your Amazon ECR repository name
 
 jobs:
   deploy:
@@ -50,6 +50,6 @@ jobs:
           package-type: Image
           image-uri: ${{ steps.build-image.outputs.image }}
           role: ${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}
-          environment: '{"OPENAI_API_KEY":"${{ secrets.OPENAI_API_KEY }}","ELEVENLABS_API_KEY":"${{ secrets.ELEVENLABS_API_KEY }}","TELEGRAM_BOT_TOKEN":"${{ secrets.TELEGRAM_BOT_TOKEN }}","TELEGRAM_WEBHOOK_ENDPOINT":"${{ secrets.TELEGRAM_WEBHOOK_ENDPOINT }}","MONGODB_CONNECTION_STRING":"${{ secrets.MONGODB_CONNECTION_STRING }}","COMET_API_KEY":"${{ secrets.COMET_API_KEY }}","QDRANT_API_KEY":"${{ secrets.QDRANT_API_KEY }}","QDRANT_URL":"${{ secrets.QDRANT_URL }}", "OPIK_CONFIG_PATH": "/tmp/.opik.config"}'
+          environment: '{"GEMINI_API_KEY":"${{ secrets.GEMINI_API_KEY }}", "GROQ_API_KEY":"${{ secrets.GROQ_API_KEY }}","ELEVENLABS_API_KEY":"${{ secrets.ELEVENLABS_API_KEY }}","TELEGRAM_BOT_TOKEN":"${{ secrets.TELEGRAM_BOT_TOKEN }}","TELEGRAM_WEBHOOK_ENDPOINT":"${{ secrets.TELEGRAM_WEBHOOK_ENDPOINT }}","MONGODB_CONNECTION_STRING":"${{ secrets.MONGODB_CONNECTION_STRING }}","COMET_API_KEY":"${{ secrets.COMET_API_KEY }}","QDRANT_API_KEY":"${{ secrets.QDRANT_API_KEY }}","QDRANT_URL":"${{ secrets.QDRANT_URL }}", "OPIK_CONFIG_PATH": "/tmp/.opik.config"}'
           timeout: 180
           memory-size: 1024

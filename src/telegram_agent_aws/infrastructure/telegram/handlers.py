@@ -6,9 +6,10 @@ from telegram.ext import ContextTypes
 
 from telegram_agent_aws.application.conversation_service.generate_response import get_agent_response
 from telegram_agent_aws.infrastructure.clients.elevenlabs import get_elevenlabs_client
-from telegram_agent_aws.infrastructure.clients.openai import get_openai_client
+from telegram_agent_aws.infrastructure.clients.openai import get_openai_client  # noqa: F401 (kept intentionally)
+from telegram_agent_aws.infrastructure.clients.groq import get_groq_client
 
-openai_client = get_openai_client()
+groq_client = get_groq_client()
 elevenlabs_client = get_elevenlabs_client()
 
 
@@ -27,9 +28,9 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await file.download_to_drive(file_path)
 
     with open(file_path, "rb") as audio_file:
-        transcription = openai_client.audio.transcriptions.create(
+        transcription = groq_client.audio.transcriptions.create(
             file=audio_file,
-            model="whisper-1",
+            model="whisper-large-v3",
         )
     os.remove(file_path)
 
@@ -50,8 +51,8 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     os.remove(file_path)
 
     # Step 1: Get vision response
-    vision_response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
+    vision_response = groq_client.chat.completions.create(
+        model="meta-llama/llama-4-scout-17b-16e-instruct",
         messages=[
             {
                 "role": "user",

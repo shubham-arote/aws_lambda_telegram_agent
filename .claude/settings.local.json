@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -A5 '^name = \"langchain\"$' uv.lock)",
+      "Bash(python -c \"import langchain; print\\(langchain.__version__\\); import langchain.load; print\\('langchain.load OK'\\)\")",
+      "Bash(grep -A3 '^name = \"langchain\"$' uv.lock)",
+      "Bash(grep -A3 '^name = \"opik\"$' uv.lock)",
+      "Bash(grep -A3 '^name = \"langchain-community\"$' uv.lock)",
+      "Bash(grep -A3 '^name = \"langchain-core\"$' uv.lock)",
+      "Bash(grep -A3 '^name = \"langchain-openai\"$' uv.lock)"
+    ]
+  }
+}

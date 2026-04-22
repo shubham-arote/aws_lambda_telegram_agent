@@ -13,9 +13,6 @@ from telegram_agent_aws.application.conversation_service.workflow.nodes import (
 from telegram_agent_aws.application.conversation_service.workflow.state import TelegramAgentState
 from telegram_agent_aws.application.conversation_service.workflow.tools import get_retriever_tool
 
-retriever_tool = get_retriever_tool()
-
-
 @lru_cache(maxsize=1)
 def create_workflow_graph():
     graph_builder = StateGraph(TelegramAgentState)
@@ -23,7 +20,7 @@ def create_workflow_graph():
     graph_builder.add_node("router_node", router_node)
     graph_builder.add_node("generate_text_response_node", generate_text_response_node)
     graph_builder.add_node("summarize_conversation_node", summarize_conversation_node)
-    graph_builder.add_node("tools", ToolNode([retriever_tool]))
+    graph_builder.add_node("tools", ToolNode([get_retriever_tool()]))
     graph_builder.add_node("generate_final_response_node", generate_final_response_node)
 
     graph_builder.add_edge(START, "router_node")

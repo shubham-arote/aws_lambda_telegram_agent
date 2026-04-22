@@ -12,7 +12,7 @@ from telegram_agent_aws.infrastructure.clients.qdrant import get_qdrant_client
 @lru_cache(maxsize=1)
 def get_retriever_tool():
     """Get the retriever tool as a singleton using LRU cache."""
-    embeddings = GoogleGenerativeAIEmbeddings(model=settings.EMBEDDING_MODEL, api_key=settings.GEMINI_API_KEY)
+    embeddings = GoogleGenerativeAIEmbeddings(model=settings.EMBEDDING_MODEL, google_api_key=settings.GEMINI_API_KEY)
 
     vector_store = QdrantVectorStore(
         client=get_qdrant_client(),

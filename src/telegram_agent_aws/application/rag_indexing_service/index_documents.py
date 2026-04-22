@@ -20,7 +20,7 @@ def generate_split_documents():
 
 def index_documents():
     all_splits = generate_split_documents()
-    embeddings = GoogleGenerativeAIEmbeddings(model=settings.EMBEDDING_MODEL, api_key=settings.GEMINI_API_KEY)
+    embeddings = GoogleGenerativeAIEmbeddings(model=settings.EMBEDDING_MODEL, google_api_key=settings.GEMINI_API_KEY)
 
     QdrantVectorStore.from_documents(
         documents=all_splits,

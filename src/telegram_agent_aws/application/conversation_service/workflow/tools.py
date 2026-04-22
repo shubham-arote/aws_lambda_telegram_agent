@@ -24,7 +24,7 @@ def get_retriever_tool():
 
     retriever_tool = create_retriever_tool(
         retriever=retriever,
-        name="retrieve_telegram_agent_aws_information_tool",
+        name="retrieve_karan_information_tool",
         description="Retrieve information about the Telegram Agent's background, academic journey, professional experience, major projects, philosophy, values, hobbies and personal interests",
     )
 
